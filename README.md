@@ -33,7 +33,7 @@ versions of the dll as DirectShow Filter ".ax" files.
 ### Binaries
 
 Binaries of the virtual audio capture device are included to illustrate the function of the program.
-The dll files have been renamed from to ".ax". Original dll files can be downloaded from the author's repository.
+The dll files have been renamed to ".ax". Original dll files can be downloaded from the author's repository.
 
 ### Copyright
 
