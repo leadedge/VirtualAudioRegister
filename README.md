@@ -13,10 +13,12 @@ If "virtual-audio-capturer" has not been registered, click the 'Register' button
 This will register both 32 bit and 64 bit versions.
 After confirmation of success, the button will show 'UnRegister'.
 Click 'Unregister' to remove it from the system. To update to new dll files, click 'Unregister' and then 'Register' again.
-				
+
+### Manual registration
+
 You can also register manually. There are separate folders for 32 bit and 64 bit versions and you can install both on a 64 bit system. In each folder you will find "_register_run_as_admin.bat". RH click and "Run as Administrator" to register. Register the 32 bit version first.
 
-###Building the project
+### Building the project
 
 The project files are for Visual Studio 2022
 The application should be built x64 to register both versions directly using the registry.
@@ -31,8 +33,7 @@ versions of the dll as DirectShow Filter ".ax" files.
 ### Binaries
 
 Binaries of the virtual audio capture device are included to illustrate the function of the program.
-The dll files have been renamed as ".ax" DirectShow filter files.
-Original dll files can be downloaded from the author's repository.
+The dll files have been renamed from to ".ax". Original dll files can be downloaded from the author's repository.
 
 ### Copyright
 
