@@ -38,6 +38,6 @@ The dll files have been renamed from to ".ax". Original dll files can be downloa
 ### Copyright
 
 VirtualAudioRegister - Copyright (C) 2023 Lynn Jarvis [http://spout.zeal.co/](http://spout.zeal.co/)\
-VirtualAudioRegister is licenced using the GNU Lesser General Public License.
+VirtualAudioRegister is licenced using the GNU General Public License.
 
 
