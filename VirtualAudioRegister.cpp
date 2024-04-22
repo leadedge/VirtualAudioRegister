@@ -19,12 +19,24 @@
 //
 //		30.03.23 - Started based on SpoutCamSettings
 //				   Version 1.000
+//		12.08.23 - Changed to requireAdministrator privileges
+//		05.09.23 - Configuration all - requireAdministrator privileges
+//				   Version 1.001
+//		22.04.24 - Update SpoutUtils
+//				   Include Shlwapi, removed from SpoutUtils
+//				   Increase font size from 8 to 9
+//				   Replace MessageBox with SpoutMessageBox for help dialog
+//				   Version 1.002
 //
 
 #include <windows.h>
 #include <Shlobj.h> // For IsUserAnAdmin
+#include <Shlwapi.h> // For PathRemoveFileSpec
 #include "resource.h" // Dialog layout
 #include "SpoutGL\SpoutUtils.h" // Registry functions (local folder)
+
+#pragma comment(lib, "Shlwapi.Lib")
+
 using namespace spoututils;
 
 static HINSTANCE g_hInst = nullptr; // Used for LoadImage
@@ -252,17 +264,25 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			break;
 
 			case IDC_CHECK_HELP:
-				sprintf_s(str1, 1024, "Register a virtual audio device that captures what you hear from the speakers. ");
-				strcat_s(str1, 1024, "The device is a DirectShow filter and can be used with FFmpeg to record the audio. ");
-				strcat_s(str1, 1024, "Developed by Roger Pack :\n\n");
-				strcat_s(str1, 1024, "https://github.com/rdp/virtual-audio-capture-grabber-device\n\n");
-				strcat_s(str1, 1024, "If 'virtual-audio-device' has not been registered, click the 'Register' button. ");
+				sprintf_s(str1, 1024, "Register a virtual audio device that captures what you hear from the speakers.\n");
+				strcat_s(str1, 1024, "The device is a DirectShow filter and can be used with FFmpeg to record the audio.\n");
+
+				strcat_s(str1, 1024, "Developed by <a href=\"https://github.com/rdp/virtual-audio-capture-grabber-device'\">Roger Pack</a>.\n\n");
+
+				strcat_s(str1, 1024, "If 'virtual-audio-device' has not been registered, click the 'Register' button.\n");
 				strcat_s(str1, 1024, "This will register both 32 bit and 64 bit versions.\n\n");
-				strcat_s(str1, 1024, "After confirmation of success, the button will show 'UnRegister'. ");
-				strcat_s(str1, 1024, "Click 'Unregister' to remove virtual-audio-device from the system.\n\n");
-				strcat_s(str1, 1024, "To update to new copies of the virtual-audio-device dll, click 'Unregister' and then 'Register' again.\n\n");
-				strcat_s(str1, 1024, "https://spout.zeal.co/\n\n");
-				MessageBoxA(hDlg, str1, "Registration", MB_OK | MB_ICONINFORMATION);
+
+				strcat_s(str1, 1024, "After confirmation of success, the button will show 'UnRegister'.\n");
+				strcat_s(str1, 1024, "Click 'Unregister' to remove virtual-audio-device from the system.\n\n")
+					;
+				strcat_s(str1, 1024, "To update to new copies of the virtual-audio-device dll,\nclick 'Unregister' and then 'Register' again.\n\n");
+				strcat_s(str1, 1024, "                                            <a href=\"http://spout.zeal.co\">http://spout.zeal.co</a>\n\n");
+
+				// ??? 
+				SpoutMessageBoxIcon(LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCEA(IDI_SPOUTICON)));
+				SpoutMessageBox(hDlg, str1, "Registration", MB_OK | MB_USERICON);
+				// MessageBoxA(hDlg, str1, "Registration", MB_OK | MB_ICONINFORMATION);
+
 				break;
 
 			case IDOK:

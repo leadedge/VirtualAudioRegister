@@ -6,7 +6,7 @@
 
 		- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		Copyright (c) 2017-2023, Lynn Jarvis. All rights reserved.
+		Copyright (c) 2017-2024, Lynn Jarvis. All rights reserved.
 
 		Redistribution and use in source and binary forms, with or without modification, 
 		are permitted provided that the following conditions are met:
@@ -29,6 +29,7 @@
 		OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+
 #pragma once
 #ifndef __spoutUtils__ // standard way as well
 #define __spoutUtils__
@@ -40,10 +41,11 @@
 #include <fstream> // for log file
 #include <time.h> // for time and date
 #include <io.h> // for _access
+#include <direct.h> // for _getcwd
 #include <vector>
 #include <string>
 #include <Shellapi.h> // for shellexecute
-#include <shlwapi.h> // for path functions
+#include <Commctrl.h> // For TaskDialogIndirect
 
 //
 // C++11 timer is only available for MS Visual Studio 2015 and above.
@@ -64,9 +66,20 @@
 #endif
 
 #pragma comment(lib, "Shell32.lib") // for shellexecute
-#pragma comment(lib, "shlwapi.lib") // for path functions
 #pragma comment(lib, "Advapi32.lib") // for registry functions
 #pragma comment(lib, "Version.lib") // for version resources where necessary
+#pragma comment(lib, "Comctl32.lib") // For taskdialog
+
+#ifdef _MSC_VER
+// https://learn.microsoft.com/en-us/windows/win32/controls/cookbook-overview
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif
+
+
+// For custom SpoutMessageBox button
+#define MB_USERBUTTON 0x00000007L
 
 // SpoutUtils
 namespace spoututils {
@@ -88,7 +101,6 @@ namespace spoututils {
 		SPOUT_LOG_NONE
 	};
 
-
 	//
 	// Information
 	//
@@ -102,6 +114,21 @@ namespace spoututils {
 	// Get the module handle of an executable or dll
 	HMODULE SPOUT_DLLEXP GetCurrentModule();
 
+	// Get executable or dll version
+	std::string SPOUT_DLLEXP GetExeVersion(const char* path);
+
+	// Get executable or dll path
+	std::string SPOUT_DLLEXP GetExePath();
+
+	// Get executable or dll name
+	std::string SPOUT_DLLEXP GetExeName();
+
+	// Remove path and return the file name
+	void SPOUT_DLLEXP RemovePath(std::string& path);
+
+	// Remove file name and return the path
+	void SPOUT_DLLEXP RemoveName(std::string& path);
+
 	//
 	// Console management
 	//
@@ -114,7 +141,7 @@ namespace spoututils {
 	// Close console window.
 	// The optional warning displays a MessageBox if user notification is required.
 	void SPOUT_DLLEXP CloseSpoutConsole(bool bWarning = false);
-	
+
 	// Enable logging to the console.
 	// Logs are displayed in a console window.  
 	// Useful for program development.
@@ -154,11 +181,11 @@ namespace spoututils {
 	// Is file logging enabled
 	bool SPOUT_DLLEXP LogFileEnabled();
 
-	// Return the log file as a string
-	std::string SPOUT_DLLEXP GetSpoutLog(const char* filepath = nullptr);
-
 	// Return the full log file path
 	std::string SPOUT_DLLEXP GetSpoutLogPath();
+
+	// Return the log file as a string
+	std::string SPOUT_DLLEXP GetSpoutLog(const char* filepath = nullptr);
 
 	// Show the log file folder in Windows Explorer
 	void SPOUT_DLLEXP ShowSpoutLogs();
@@ -187,19 +214,70 @@ namespace spoututils {
 	// Logging function.
 	void SPOUT_DLLEXP _doLog(SpoutLogLevel level, const char* format, va_list args);
 
+	// Print to console (printf replacement)
+	int SPOUT_DLLEXP _conprint(const char* format, ...);
+
 	//
 	// MessageBox dialog
 	//
 
 	// MessageBox dialog with optional timeout.
-	// Used where a Windows MessageBox would interfere with the application GUI.  
 	// The dialog closes itself if a timeout is specified.
 	int SPOUT_DLLEXP SpoutMessageBox(const char * message, DWORD dwMilliseconds = 0);
+
+	// MessageBox with variable arguments
+	int SPOUT_DLLEXP SpoutMessageBox(const char * caption, const char* format, ...);
 	
+	// MessageBox with variable arguments and icon, buttons
+	int SPOUT_DLLEXP SpoutMessageBox(const char* caption, UINT uType, const char* format, ...);
+
 	// MessageBox dialog with standard arguments.
 	// Replaces an existing MessageBox call.
+	// uType options : standard MessageBox buttons and icons
+	// MB_USERICON - use together with SpoutMessageBoxIcon
+	// MB_USERBUTTON - use together with SpoutMessageBoxButton
+	// Hyperlinks can be included in the content using HTML format.
+	// For example : <a href=\"https://spout.zeal.co/\">Spout home page</a>
+	// Only double quotes are supported and must be escaped.
 	int SPOUT_DLLEXP SpoutMessageBox(HWND hwnd, LPCSTR message, LPCSTR caption, UINT uType, DWORD dwMilliseconds = 0);
-	
+
+	// MessageBox dialog with standard arguments
+	// including taskdialog main instruction large text
+	int SPOUT_DLLEXP SpoutMessageBox(HWND hwnd, LPCSTR message, LPCSTR caption,  UINT uType, const char* instruction, DWORD dwMilliseconds = 0);
+
+	// MessageBox dialog with an edit control for text input
+	// Can be used in place of a specific application resource dialog
+	//   o For message content, the control is in the footer area
+	//   o If no message, the control is in the main content area
+	//   o All SpoutMessageBox functions such as user icon and buttons are available
+	int SPOUT_DLLEXP SpoutMessageBox(HWND hwnd, LPCSTR message, LPCSTR caption, UINT uType, std::string& text);
+
+	// MessageBox dialog with a combobox control for item selection
+	// Can be used in place of a specific application resource dialog
+	// Properties the same as the edit control
+	int SPOUT_DLLEXP SpoutMessageBox(HWND hwnd, LPCSTR message, LPCSTR caption, UINT uType, std::vector<std::string> items, int &selected);
+
+	// Custom icon for SpoutMessageBox from resources
+	void SPOUT_DLLEXP SpoutMessageBoxIcon(HICON hIcon);
+
+	// Custom icon for SpoutMessageBox from file
+	bool SPOUT_DLLEXP SpoutMessageBoxIcon(std::string iconfile);
+
+	// Custom button for SpoutMessageBox
+	void SPOUT_DLLEXP SpoutMessageBoxButton(int ID, std::wstring title);
+
+	// Activate modeless mode using SpoutPanel.exe
+	void SPOUT_DLLEXP SpoutMessageBoxModeless(bool bMode = true);
+
+	// Window handle for SpoutMessageBox where not specified
+	void SPOUT_DLLEXP SpoutMessageBoxWindow(HWND hWnd);
+
+	// Copy text to the clipboard
+	bool SPOUT_DLLEXP CopyToClipBoard(HWND hwnd, const char* caps);
+
+	// Open logs folder
+	bool SPOUT_DLLEXP OpenSpoutLogs();
+
 	//
 	// Registry utilities
 	//
@@ -239,7 +317,8 @@ namespace spoututils {
 
 	// Stop timing and return microseconds elapsed.
 	// Code console output can be enabled for quick timing tests.
-	double SPOUT_DLLEXP EndTiming();
+	// Default milliseconds
+	double SPOUT_DLLEXP EndTiming(bool microseconds = false);
 
 	// Monitor refresh rate
 	double SPOUT_DLLEXP GetRefreshRate();
@@ -247,10 +326,9 @@ namespace spoututils {
 #ifdef USE_CHRONO
 	// Microseconds elapsed since epoch
 	double SPOUT_DLLEXP ElapsedMicroseconds();
-#else
+#endif
 	void SPOUT_DLLEXP StartCounter();
 	double SPOUT_DLLEXP GetCounter();
-#endif
 
 	//
 	// Private functions
@@ -262,11 +340,48 @@ namespace spoututils {
 		std::string _getLogPath();
 		std::string _getLogFilePath(const char *filename);
 		std::string _levelName(SpoutLogLevel level);
+		// Taskdialog for SpoutMessageBox
+		int MessageTaskDialog(HWND hWnd, const char* content, const char* caption, DWORD dwButtons, DWORD dwMilliseconds);
+		// TaskDialogIndirect callback to handle timer, topmost and hyperlinks
+		HRESULT TDcallbackProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, LONG_PTR lpRefData);
+#ifndef _MSC_VER
+		// Timeout MessageBox for other compilers
+		int MessageBoxTimeoutA(IN HWND hWnd,
+			IN LPCSTR lpText, IN LPCSTR lpCaption, IN UINT uType,
+			IN WORD wLanguageId, IN DWORD dwMilliseconds);
+#endif
 
-		// Used internally for NVIDIA profile functions
-		bool GetNVIDIAmode(const char *command, int * mode);
-		bool SetNVIDIAmode(const char *command, int mode);
-		bool ExecuteProcess(const char *path);
+		// Use ShellExecutEx to open a program
+		bool ExecuteProcess(const char* path, const char* command = nullptr);
+		// Open SpoutPanel with command line for modeless SpoutMessageBox
+		bool OpenSpoutPanel(const char* message);
+		// Application window
+		HWND hwndMain = NULL;
+		// For topmost
+		HWND hwndTop = NULL;
+		bool bTopMost = false;
+		// Modeless TaskDialog by way of OpenSpoutPanel
+		bool bModeless = false; // Default use local TaskDialogIndirect
+		// For custom icon
+		HICON hTaskIcon = NULL;
+		// For custom buttons
+		std::vector<int>TDbuttonID;
+		std::vector<std::wstring>TDbuttonTitle;
+		// Main instruction text
+		std::wstring wstrInstruction;
+
+		// For edit text control
+		bool bEdit = false;
+		HWND hEdit = NULL;
+		std::string stredit;
+		#define IDC_TASK_EDIT 101
+
+		// For combo box control
+		bool bCombo = false;
+		HWND hCombo = NULL;
+		std::vector<std::string> comboitems;
+		int comboindex = 0;
+		#define IDC_TASK_COMBO 102
 
 	}
 
