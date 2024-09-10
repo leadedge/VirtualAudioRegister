@@ -15,7 +15,7 @@ FONT 9, "Ms Shell Dlg"
     PUSHBUTTON      "Register", IDC_CHECK,    13, 15, 40, 14, 0, WS_EX_LEFT
     DEFPUSHBUTTON   "OK",       IDOK,         57, 15, 40, 14, 0, WS_EX_LEFT
     PUSHBUTTON      "Help", IDC_CHECK_HELP,  101, 15, 40, 14, 0, WS_EX_LEFT
-	LTEXT           "Vers 1.002", IDC_VERS,   15, 37, 32,  9, SS_LEFT, WS_EX_LEFT
+	LTEXT           "Vers 1.003", IDC_VERS,   15, 37, 32,  9, SS_LEFT, WS_EX_LEFT
 }
 
 //

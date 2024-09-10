@@ -27,6 +27,10 @@
 //				   Increase font size from 8 to 9
 //				   Replace MessageBox with SpoutMessageBox for help dialog
 //				   Version 1.002
+//		10.09.24 - Update SpoutUtils 2.007.014 
+//				   Correct ReadPathFromRegistry
+//				   "valuename" argument can be null for the (Default) key string
+//				   Version 1.003
 //
 
 #include <windows.h>
@@ -167,7 +171,7 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 		// Is 'virtual-audio-device' registered ?
 		if (FindSubKey(HKEY_LOCAL_MACHINE, "\\SOFTWARE\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")
 		 || FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")) {
-			// Change title on IDC_CHECK button
+			// Change title on IDC_CHECK button (default in resource.rc is "Register")
 			SetDlgItemTextA(hDlg, IDC_CHECK, "UnRegister");
 		}
 		return TRUE; // return TRUE unless you set the focus to a control
@@ -213,7 +217,6 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				// Is 'virtual-audio-device' registered ?
 				if (FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\CLSID\\{8E146464-DB61-4309-AFA1-3578E927E935}")
 					|| FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")) {
-
 					// Is 32 bit registered
 					char dllpath[MAX_PATH]={};
 					if (ReadPathFromRegistry(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}\\InprocServer32", "", dllpath, MAX_PATH)) {
@@ -239,7 +242,6 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 #endif
 				} // endif registered
 				else {
-
 					// 32 bit register
 					if (SetRegistry(nullptr, VirtualAudio32path)) {
 						SetDlgItemTextA(hDlg, IDC_CHECK, "UnRegister");
