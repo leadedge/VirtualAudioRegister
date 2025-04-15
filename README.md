@@ -37,7 +37,7 @@ Original dll files can be downloaded from the author's repository.
 
 ### Copyright
 
-VirtualAudioRegister - Copyright (C) 2023-2024 Lynn Jarvis [http://spout.zeal.co/](http://spout.zeal.co/)\
+VirtualAudioRegister - Copyright (C) 2023-2025 Lynn Jarvis [http://spout.zeal.co/](http://spout.zeal.co/)\
 VirtualAudioRegister is licenced using the GNU General Public License.
 
 
