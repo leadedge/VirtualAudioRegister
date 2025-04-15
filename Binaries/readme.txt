@@ -14,8 +14,18 @@ This will register both 32 bit and 64 bit versions.
 After confirmation of success, the button will show 'UnRegister'.
 Click 'Unregister' to remove it from the system.
 
+If "virtual-audio-device" has not been registered, click the "Register" button.
+This will register both 32 bit and 64 bit versions.
+
+You will see either confirmation of success or details of any error.
+If an error occurs, the number is shown to help trace the problem.
+On success, the button will show 'UnRegister' which can then be used
+to remove virtual-audio-device from the system.
+
 To update to new dll files, click 'Unregister' and then 'Register' again.
 				
-You can also register manually. There are separate folders for 32 bit and 64 bit versions and you can install both on a 64 bit system. In each folder you will find "_register_run_as_admin.bat". RH click and "Run as Administrator" to register. Register the 32 bit version first.
+You can also register manually. There are separate folders for 32 bit and 64 bit versions
+and you can install both on a 64 bit system. In each folder you will find "_register_run_as_admin.bat".
+Right click and "Run as Administrator" to register. Register the 32 bit version first.
 
 
