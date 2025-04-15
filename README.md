@@ -28,16 +28,16 @@ the Visual Studio runtime dlls are not necessary.
 
 The application has to be located together with folders 
 "VirtualAudioDevice32" and "VirtualAudioDevice64" with 32 bit and 64 bit
-versions of the dll as DirectShow Filter ".ax" files.
+versions of the DirectShow Filter dll.
 
 ### Binaries
 
 Binaries of the virtual audio capture device are included to illustrate the function of the program.
-The dll files have been renamed to ".ax". Original dll files can be downloaded from the author's repository.
+Original dll files can be downloaded from the author's repository.
 
 ### Copyright
 
-VirtualAudioRegister - Copyright (C) 2023 Lynn Jarvis [http://spout.zeal.co/](http://spout.zeal.co/)\
+VirtualAudioRegister - Copyright (C) 2023-2024 Lynn Jarvis [http://spout.zeal.co/](http://spout.zeal.co/)\
 VirtualAudioRegister is licenced using the GNU General Public License.
 
 
