@@ -2,10 +2,10 @@
 #define IDC_STATIC (-1)
 #endif
 
-#define IDI_SPOUTICON    400
-#define IDD_AUDIOBOX       401
-#define IDC_CHECK          412
-#define IDC_CHECK_HELP     413
-#define IDC_VERS           414
- 
+#define IDD_AUDIOBOX       400
+#define IDC_CHECK          401
+#define IDC_CHECK_HELP     402
+#define IDC_VERS           403
+#define IDI_SPOUTICON      404
+
 
