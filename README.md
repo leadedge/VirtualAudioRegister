@@ -9,10 +9,15 @@ https://github.com/rdp/virtual-audio-capture-grabber-device
 VirtualAudioRegister.exe can be used to register or un-register the filters.
 This has Administrator privileges and Windows UAC might intercept, but just allow it.
 
-If "virtual-audio-capturer" has not been registered, click the 'Register' button. 
-This will register both 32 bit and 64 bit versions.
+Check "Include 32 bit" to register for use with both 32 bit and 64 bit programs.
+
+If 'virtual-audio-device' has not been registered, click the 'Register' button.
+You will see either confirmation of success or details of any error.
+				
 After confirmation of success, the button will show 'UnRegister'.
-Click 'Unregister' to remove it from the system. To update to new dll files, click 'Unregister' and then 'Register' again.
+Click 'Unregister' to remove it from the system. 
+
+To update to new dll files, click 'Unregister' and then 'Register' again.
 
 ### Manual registration
 
