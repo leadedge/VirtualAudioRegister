@@ -44,6 +44,7 @@
 //				   Change logic for Register/UnRegister depending on button state
 //				   Restore silent option for regsrv32
 //				   Change font from "Ms Shell Dlg" to "Segoe UI"
+//				   Correct CLSID number for 64 bit
 //				   Version 1.005
 //
 
@@ -118,10 +119,12 @@ bool SetRegsvr32(char * dllpath, wchar_t* wPath, bool b32bit)
 		cmdstring += RegPath;
 		cmdstring += L"\"";
 	}
-	else if(wPath && !dllpath) {
+
+	if(wPath && !dllpath) {
 		// Register
 		cmdstring = regsvrPath;
 		cmdstring += L" /s ";
+		cmdstring += L" ";
 		cmdstring += L"\"";
 		cmdstring += wPath;
 		cmdstring += L"\"";
@@ -207,10 +210,13 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			SendMessage(hDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon2);
 
 		// Is 'virtual-audio-device' registered ?
-		if (FindSubKey(HKEY_LOCAL_MACHINE, "\\SOFTWARE\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")
+		if (FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\CLSID\\{8E146464-DB61-4309-AFA1-3578E927E935}")
 		 || FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")) {
 			// Change title on IDC_CHECK button (default in resource.rc is "Register")
 			SetDlgItemTextA(hDlg, IDC_CHECK, "UnRegister");
+		}
+		else {
+			SetDlgItemTextA(hDlg, IDC_CHECK, "Register");
 		}
 
 		// 32 bit checkbox
@@ -324,7 +330,8 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					// 64 bit
 					if (SetRegsvr32(nullptr, VirtualAudio64path, false)) { // 64 bit register
 						SpoutMessageBox(NULL, "64 bit registered successfuly", "VirtualAudioRegister", MB_ICONINFORMATION | MB_OK);
-					} else {
+					}
+					else {
 						int err = GetLastError();
 						SpoutMessageBox("Warning", "Error for 64 bit register %d (0x%6.6X)", err, err);
 					}
