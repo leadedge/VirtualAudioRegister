@@ -6,15 +6,16 @@
 // Dialog resources
 //
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-IDD_AUDIOBOX DIALOG 0, 0, 155, 55
+IDD_AUDIOBOX DIALOG 0, 0, 155, 48
 STYLE DS_3DLOOK | DS_CENTER | DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_VISIBLE | WS_POPUP | WS_SYSMENU
 CAPTION "Virtual Audio Register"
-FONT 9, "Ms Shell Dlg"
+FONT 9, "Segoe UI"
 {
-    PUSHBUTTON      "Register", IDC_CHECK,    13, 15, 40, 14, 0, WS_EX_LEFT
-    DEFPUSHBUTTON   "OK",       IDOK,         57, 15, 40, 14, 0, WS_EX_LEFT
-    PUSHBUTTON      "Help", IDC_CHECK_HELP,  101, 15, 40, 14, 0, WS_EX_LEFT
-	LTEXT           "Vers 1.004", IDC_VERS,   15, 37, 32,  9, SS_LEFT, WS_EX_LEFT
+	AUTOCHECKBOX    " Include 32 bit", IDC_32, 15,  6, 100, 10, 0, WS_EX_LEFT
+    PUSHBUTTON      "Register", IDC_CHECK,     13, 20,  42, 13, 0, WS_EX_LEFT
+    DEFPUSHBUTTON   "OK",       IDOK,          56, 20,  42, 13, 0, WS_EX_LEFT
+    PUSHBUTTON      "Help", IDC_CHECK_HELP,    99, 20,  42, 13, 0, WS_EX_LEFT
+	LTEXT           "Vers 1.005", IDC_VERS,    15, 36, 100,  9, SS_LEFT, WS_EX_LEFT
 }
 
 //
@@ -26,8 +27,8 @@ IDI_SPOUTICON  ICON  "SpoutLogo4.ico" // Speaker looking thing
 // Version Information resources
 //
 VS_VERSION_INFO VERSIONINFO
-    FILEVERSION     1,0,0,4
-    PRODUCTVERSION  1,0,0,4
+    FILEVERSION     1,0,0,5
+    PRODUCTVERSION  1,0,0,5
     FILEOS          VOS_NT
     FILETYPE        VFT_APP
     FILESUBTYPE     VFT2_UNKNOWN
@@ -40,12 +41,12 @@ VS_VERSION_INFO VERSIONINFO
         {
             VALUE "CompanyName", "Leading Edge Pty Ltd\0"
             VALUE "FileDescription", "Virtual Audio registration program\0"
-            VALUE "FileVersion", "1.004\0"
+            VALUE "FileVersion", "1.005\0"
             VALUE "InternalName", "VirtualAudioRegister"
             VALUE "LegalCopyright", "Copyright \251 Lynn Jarvis 2023-2025\0"
             VALUE "OriginalFilename", "VirtualAudioRegister.exe\0"
             VALUE "ProductName", "VirtualAudioRegister\0"
-            VALUE "ProductVersion", "1.004\0"
+            VALUE "ProductVersion", "1.005\0"
         }
     }
     BLOCK "VarFileInfo"
