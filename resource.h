@@ -3,10 +3,9 @@
 #endif
 
 #define IDD_AUDIOBOX       400
-#define IDC_32             401
-#define IDC_CHECK          402
-#define IDC_CHECK_HELP     403
-#define IDC_VERS           404
-#define IDI_SPOUTICON      405
+#define IDC_CHECK          401
+#define IDC_CHECK_HELP     402
+#define IDC_VERS           403
+#define IDI_SPOUTICON      404
 
 

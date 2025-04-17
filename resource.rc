@@ -6,16 +6,15 @@
 // Dialog resources
 //
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-IDD_AUDIOBOX DIALOG 0, 0, 155, 48
+IDD_AUDIOBOX DIALOG 0, 0, 155, 36
 STYLE DS_3DLOOK | DS_CENTER | DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_VISIBLE | WS_POPUP | WS_SYSMENU
 CAPTION "Virtual Audio Register"
 FONT 9, "Segoe UI"
 {
-	AUTOCHECKBOX    " Include 32 bit", IDC_32, 15,  6, 100, 10, 0, WS_EX_LEFT
-    PUSHBUTTON      "Register", IDC_CHECK,     13, 20,  42, 13, 0, WS_EX_LEFT
-    DEFPUSHBUTTON   "OK",       IDOK,          56, 20,  42, 13, 0, WS_EX_LEFT
-    PUSHBUTTON      "Help", IDC_CHECK_HELP,    99, 20,  42, 13, 0, WS_EX_LEFT
-	LTEXT           "Vers 1.005", IDC_VERS,    15, 36, 100,  9, SS_LEFT, WS_EX_LEFT
+    PUSHBUTTON      "Register", IDC_CHECK,     13,  7,  42, 13, 0, WS_EX_LEFT
+    DEFPUSHBUTTON   "OK",       IDOK,          56,  7,  42, 13, 0, WS_EX_LEFT
+    PUSHBUTTON      "Help", IDC_CHECK_HELP,    99,  7,  42, 13, 0, WS_EX_LEFT
+	LTEXT           "Vers 1.005", IDC_VERS,    15, 23, 100,  9, SS_LEFT, WS_EX_LEFT
 }
 
 //

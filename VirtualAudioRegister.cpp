@@ -45,6 +45,7 @@
 //				   Restore silent option for regsrv32
 //				   Change font from "Ms Shell Dlg" to "Segoe UI"
 //				   Correct CLSID number for 64 bit
+//				   Remove 32 bit option for simplicity.
 //				   Version 1.005
 //
 
@@ -219,29 +220,12 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			SetDlgItemTextA(hDlg, IDC_CHECK, "Register");
 		}
 
-		// 32 bit checkbox
-		systemType = false;
-		if (FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")) {
-			systemType = true;
-		}
-		CheckDlgButton(hDlg, IDC_32, systemType); // true - both 32 & 64 bit
-
 		return TRUE; // return TRUE unless you set the focus to a control
 
 	case WM_COMMAND:
 
 		switch (LOWORD(wParam)) {
-
-			//
-			// System type checkbox
-			// True - register for both 64bit and 32bit programs
-			case IDC_32:
-				if(IsDlgButtonChecked(hDlg, IDC_32))
-					systemType = true;
-				else
-					systemType = false;
-				break;
-	
+				
 			//
 			// Register or un-register both 32 both and 64 bit versions
 			//
@@ -277,21 +261,19 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				if (strcmp(str1, "UnRegister") == 0) {
 
 					//
-					// Always un-register both 32 and 64 bit
+					// Un-register both 32 and 64 bit
 					//
 
 					// Find paths for the files that have been previously registered from the registry
 					char dllpath[MAX_PATH] {};
 					// 32 bit
-					if (FindSubKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}")) {
-						// Un-register 32
-						if (ReadPathFromRegistry(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}\\InprocServer32", "", dllpath, MAX_PATH)) {
-							if (SetRegsvr32(dllpath, nullptr, true)) { // 32 bit register
-								SpoutMessageBox(NULL, "32 bit un-registered successfuly", "VirtualAudioRegister", MB_ICONINFORMATION | MB_OK);
-							} else {
-								int err = GetLastError();
-								SpoutMessageBox("Warning", "Error for 32 bit un-register %d (0x%6.6X)", err, err);
-							}
+					// Un-register 32
+					if (ReadPathFromRegistry(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{8E14549B-DB61-4309-AFA1-3578E927E935}\\InprocServer32", "", dllpath, MAX_PATH)) {
+						if (SetRegsvr32(dllpath, nullptr, true)) { // 32 bit register
+							SpoutMessageBox(NULL, "virtual-audio-device 32 bit un-registered successfully.", "Information", MB_ICONINFORMATION | MB_OK);
+						} else {
+							int err = GetLastError();
+							SpoutMessageBox("Warning", "Error for 32 bit un-register %d (0x%6.6X)", err, err);
 						}
 					}
 
@@ -301,7 +283,7 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					if (ReadPathFromRegistry(HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes\\CLSID\\{8E146464-DB61-4309-AFA1-3578E927E935}\\InprocServer32", "", dllpath, MAX_PATH)) {
 						// Un-register 64
 						if (SetRegsvr32(dllpath, nullptr, false)) { // 64 bit unregister
-							SpoutMessageBox(NULL, "64 bit un-registered successfuly", "VirtualAudioRegister", MB_ICONINFORMATION | MB_OK);
+							SpoutMessageBox(NULL, "virtual-audio-device 64 bit un-registered successfully.", "Information", MB_ICONINFORMATION | MB_OK);
 						} else {
 							int err = GetLastError();
 							SpoutMessageBox("Warning", "Error for 64 bit un-register %d (0x%6.6X)", err, err);
@@ -316,20 +298,18 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					// Register if un-registered
 					//
 
-					// Register 32 bit if selected
-					if (systemType) {
-						if (SetRegsvr32(nullptr, VirtualAudio32path, true)) { // 32 bit register
-							SpoutMessageBox(NULL, "32 bit registered successfuly", "VirtualAudioRegister", MB_ICONINFORMATION | MB_OK);
-						}
-						else {
-							int err = GetLastError();
-							SpoutMessageBox("Warning", "Error for 32 bit register %d (0x%6.6X)", err, err);
-						}
+					// Register 32 bit
+					if (SetRegsvr32(nullptr, VirtualAudio32path, true)) { // 32 bit register
+						SpoutMessageBox(NULL, "virtual-audio-device 32 bit registered successfully.", "Information", MB_ICONINFORMATION | MB_OK);
+					}
+					else {
+						int err = GetLastError();
+						SpoutMessageBox("Warning", "Error for 32 bit register %d (0x%6.6X)", err, err);
 					}
 
 					// 64 bit
 					if (SetRegsvr32(nullptr, VirtualAudio64path, false)) { // 64 bit register
-						SpoutMessageBox(NULL, "64 bit registered successfuly", "VirtualAudioRegister", MB_ICONINFORMATION | MB_OK);
+						SpoutMessageBox(NULL, "virtual-audio-device 64 bit registered successfully.", "Information", MB_ICONINFORMATION | MB_OK);
 					}
 					else {
 						int err = GetLastError();
@@ -348,9 +328,9 @@ BOOL CALLBACK RegisterDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				strcat_s(str1, 1024, "The device is a DirectShow filter and can be used with FFmpeg to record the audio.\n");
 				strcat_s(str1, 1024, "Developed by <a href=\"https://github.com/rdp/virtual-audio-capture-grabber-device\">Roger Pack</a>.\n\n");
 
-				strcat_s(str1, 1024, "Check \"Include 32 bit\" to register for use with both 32 bit and 64 bit programs.\n\n");
-
 				strcat_s(str1, 1024, "If 'virtual-audio-device' has not been registered, click the 'Register' button.\n");
+				strcat_s(str1, 1024, "This will register both 32 bit and 64 bit versions.\n\n");
+
 				strcat_s(str1, 1024, "You will see either confirmation of success or details of any error.\n");
 				strcat_s(str1, 1024, "On success, the button will show 'UnRegister' which can then be used\n");
 				strcat_s(str1, 1024, "to remove virtual-audio-device from the system.\n\n");
