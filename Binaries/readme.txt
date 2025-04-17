@@ -12,10 +12,11 @@ This has Administrator privileges and Windows UAC might intercept, but just allo
 Check "Include 32 bit" to register for use with both 32 bit and 64 bit programs.
 
 If 'virtual-audio-device' has not been registered, click the 'Register' button.
+This will register both 32 bit and 64 bit versions.
+
 You will see either confirmation of success or details of any error.
-				
-After confirmation of success, the button will show 'UnRegister'.
-Click 'Unregister' to remove it from the system.
+On success, the button will show 'UnRegister' which can then be used
+to remove virtual-audio-device from the system.
 
 To update to new dll files, click 'Unregister' and then 'Register' again.
 				
